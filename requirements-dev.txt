@@ -1,0 +1,16 @@
+# Base requirements
+-r requirements.txt
+
+# Linting and formatting
+black
+flake8
+isort
+
+# Testing
+pytest
+pytest-cov
+pytest-sugar
+
+# Dependency and security tools
+pip-upgrader
+safety

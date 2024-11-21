@@ -1,0 +1,63 @@
+[tool.poetry]
+name = "stuntfree-ml-service"
+version = "0.1.0"
+description = "A FastAPI-based machine learning service API for recommendations."
+authors = ["Elsam Rafi Saputra <134671598+elsamrafisptr@users.noreply.github.com>", "Rizqulloh Brilliant 'Ainur Rofiq"]
+readme = "README.md"
+keywords = ["FastAPI", "Machine Learning", "Recommendation System", "API"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+alembic = ">=1.13.3"
+dependency-injector = ">=4.42.0"
+fastapi = {extras = ["standard"], version = ">=0.115.3"}
+loguru = ">=0.7.2"
+pydantic = ">=2.9.2"
+pydantic-settings = ">=2.6.1"
+pyjwt = ">=2.9.0"
+sqlalchemy = ">=2.0.36"
+pycaret = ">=3.3.2"
+psycopg2-binary = ">=2.9.10"
+numpy = ">=1.26.4"
+pandas = ">=2.1.4"
+scikit-learn = ">=1.4.2"
+plotly = ">=5.24.1"
+matplotlib = ">=3.7.5"
+sktime = ">=0.26.0"
+uvicorn = {extras = ["standard"], version = ">=0.32.0"}
+
+[tool.poetry.group.dev.dependencies]
+black = "*"
+flake8 = "*"
+isort = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-sugar = "*"
+pip-upgrader = "*"
+safety = "*"
+
+[tool.poetry.scripts]
+start = "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+[build-system]
+requires = ["poetry-core>=1.6.1"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+
+[tool.flake8]
+max-line-length = 88
+exclude = ["venv", "__pycache__"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--strict-markers --maxfail=2 --durations=10"
+testpaths = ["tests"]
+
+[tool.safety]
+ignore-vulnerabilities = []
