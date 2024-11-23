@@ -4,30 +4,35 @@ import socket
 import psutil
 
 from app.api.v1.routes import routers as v1_routers
+from app.core.config import configs
+from app.core.container import Container
+from app.util.pattern import singleton
 
+@singleton
 class App(FastAPI):
     def __init__(self):
         self.app: FastAPI = FastAPI(
-            title="StuntFree Machine Learning Service API",
+            title=configs.PROJECT_NAME,
             version="0.1.0",
         )
 
+        self.container = Container()
+        self.db = self.container.db()
+
         # CORS
-        if True:
+        if configs.CORS_ORIGINS:
             self.app.add_middleware(
                 CORSMiddleware,
-                allow_origins=["*"],
+                allow_origins=[str(origin) for origin in configs.CORS_ORIGINS],
                 allow_credentials=True,
                 allow_methods=["*"],
                 allow_headers=["*"]
             )
 
-        # Root Endpoint
         @self.app.get("/")
         def root():
-            return {"message": "Welcome to StuntFree Machine Learning Service API"}
+            return {f"message": "Welcome to {configs.PROJECT_NAME}"}
 
-        # Health Check Endpoint
         @self.app.get("/health", status_code=status.HTTP_200_OK)
         def health_check():
             cpu_usage = psutil.cpu_percent(interval=0.1)
@@ -46,7 +51,7 @@ class App(FastAPI):
             status_text = "healthy" if not issues else "unhealthy"
 
             return {
-                "service": "StuntFree Machine Learning Service API",
+                "service": configs.PROJECT_NAME,
                 "status": status_text,
                 "hostname": hostname,
                 "cpu_usage": cpu_usage,
@@ -54,7 +59,7 @@ class App(FastAPI):
                 "issues": issues
             }
         
-        self.app.include_router(v1_routers, prefix="/api/v1")
+        self.app.include_router(v1_routers, prefix=configs.API_V1_STR)
 
 app_instance = App()
 app = app_instance.app

@@ -1,12 +1,9 @@
 import os
 from typing import List
-
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 
 load_dotenv()
-
-ENV: str = ""
 
 class Configs(BaseSettings):
     ENV: str = os.getenv("ENV", "development")
@@ -34,7 +31,7 @@ class Configs(BaseSettings):
     DB_USER: str = os.getenv("DB_USER", "postgres")
     DB_PASSWORD: str = os.getenv("DB_PASSWORD", "password")
     DB_HOST: str = os.getenv("DB_HOST", "localhost")
-    DB_PORT: str = os.getenv("DB_PORT", "5432")
+    DB_PORT: int = int(os.getenv("DB_PORT", 5432))
     DB_ENGINE: str = DB_ENGINE_MAPPER[DB]
 
     DB_URI: str = f"{DB_ENGINE}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{ENV_DATABASE_MAPPER[ENV]}"
@@ -44,7 +41,7 @@ class Configs(BaseSettings):
     JWT_ACCESS_TOKEN_EXP: str = os.getenv("ACCESS_TOKEN_EXP", "1d")
     JWT_REFRESH_TOKEN_EXP: str = os.getenv("REFRESH_TOKEN_EXP", "7d")  
 
-    # Cors
+    # CORS
     CORS_ORIGINS: List[str] = os.getenv("CORS_ALLOWED_HOSTS", "*").split(",")
 
     PAGE: int = 1
@@ -59,11 +56,11 @@ class TestConfigs(Configs):
 
 configs = Configs()
 
-if ENV == "production":
+if configs.ENV == "production":
     pass
-elif ENV == "development":
+elif configs.ENV == "development":
     pass
-elif ENV == "stage":
+elif configs.ENV == "stage":
     pass
-elif ENV == "testing":
+elif configs.ENV == "testing":
     setting = TestConfigs()
