@@ -1,0 +1,11 @@
+service RouteGuide {
+   rpc GetFeature(Point) returns (Feature) {}
+}
+
+message Point {
+    string name = 1;
+}
+
+message Feature {
+    string message = 1;
+}

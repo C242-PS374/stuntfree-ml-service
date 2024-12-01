@@ -114,3 +114,5 @@ websockets==13.1
 werkzeug==3.0.6
 yellowbrick==1.5
 zipp==3.21.0
+grpcio==1.68.0
+grpcio-tools==1.68.0
