@@ -1,43 +1,65 @@
 import asyncio
+import grpc
 import logging
 import os
 import signal
-import grpc
+import platform
 from concurrent import futures
-from app.generated import ml_service_pb2_grpc
-from app.controller import MLService
-from app.core.config import configs
+from generated import ml_services_pb2_grpc
+# from app.controller.image_detection import ImageService
+# from app.controller.predict_nutrition import NutritionService
+# from app.controller.predict_stunting import StuntingService
 
 class GRPCServer:
     def __init__(self):
-        self.logger = logging.getLogger(__name__)
-        self.server = grpc.server(
-            futures.ThreadPoolExecutor(max_workers=os.cpu_count() * 2) 
+        self.logger = logging.getLogger("GRPCServer")
+        logging.basicConfig(
+            level=logging.INFO,
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         )
-        self.register_services()
 
-    def register_services(self):
-        ml_service_pb2_grpc.add_MLServiceServicer_to_server(MLService(), self.server)
+        self.server = grpc.server(
+            futures.ThreadPoolExecutor(max_workers=os.cpu_count() * 2)
+        )
+        self.port = int(os.getenv("GRPC_SERVER_PORT", 50051))
+        self._register_services()
 
-    async def serve(self):
-        port = os.getenv("GRPC_SERVER_PORT", 50051)
-        self.server.add_insecure_port(f"[::]:{port}")
-
+    def _register_services(self):
         try:
-            self.server.start()
-            self.logger.info(f"gRPC Server is running on port {port}")
-            await self.graceful_shutdown()
+            # ml_services_pb2_grpc.add_MLServiceServicer_to_server(ImageService(), self.server)
+            # ml_services_pb2_grpc.add_MLServiceServicer_to_server(NutritionService(), self.server)
+            # ml_services_pb2_grpc.add_MLServiceServicer_to_server(StuntingService(), self.server)
+            self.logger.info("All gRPC services registered successfully.")
         except Exception as e:
-            self.logger.error(f"Error starting gRPC server: {str(e)}", exc_info=True)
+            self.logger.error(f"Failed to register services: {str(e)}", exc_info=True)
             raise
 
-    async def graceful_shutdown(self):
-        loop = asyncio.get_event_loop()
-        loop.add_signal_handler(signal.SIGTERM, self.shutdown_server)
-        loop.add_signal_handler(signal.SIGINT, self.shutdown_server)
-        await asyncio.Future()
+    async def start(self):
+        try:
+            self.server.add_insecure_port(f"[::]:{self.port}")
+            self.server.start()
+            self.logger.info(f"gRPC Server running on port {self.port}")
+            await self._wait_for_termination()
+        except Exception as e:
+            self.logger.error(f"Error while starting the gRPC server: {str(e)}", exc_info=True)
+            raise
 
-    def shutdown_server(self):
-        self.logger.info("Shutting down gRPC server...")
+    async def _wait_for_termination(self):
+        loop = asyncio.get_event_loop()
+        try:
+            if platform.system() != "Windows":
+                for sig in (signal.SIGTERM, signal.SIGINT):
+                    loop.add_signal_handler(sig, self.shutdown)
+            else:
+                self.logger.warning("Signal handling is not supported on Windows. Using wait_for_termination only.")
+
+            await self.server.wait_for_termination()
+        except asyncio.CancelledError:
+            self.logger.warning("Termination signals received. Shutting down...")
+        except Exception as e:
+            self.logger.error(f"Unexpected error during termination: {str(e)}", exc_info=True)
+
+    def shutdown(self):
+        self.logger.info("Shutting down the gRPC server...")
         self.server.stop(grace=5)
-        self.logger.info("gRPC Server stopped successfully.")
+        self.logger.info("gRPC server stopped successfully.")
