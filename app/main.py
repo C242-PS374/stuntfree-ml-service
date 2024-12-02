@@ -1,40 +1,46 @@
 import asyncio
 import logging
-from app.core.config import configs
-from app.core.server import GRPCServer
-from app.util.pattern import singleton
+from core.config import configs
+from core.server import GRPCServer
+from util.pattern import singleton
+
 
 @singleton
 class App:
     def __init__(self):
         self.grpc_server = GRPCServer()
-        self._setup_logging()
+        self.logger = self._setup_logging()
 
     def _setup_logging(self):
         logging.basicConfig(
             level=logging.INFO,
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         )
-        self.logger = logging.getLogger(configs.PROJECT_NAME)
-        self.logger.info("Logging initialized for %s", configs.PROJECT_NAME)
+        logger = logging.getLogger(configs.PROJECT_NAME)
+        logger.info("Logging initialized for %s", configs.PROJECT_NAME)
+        return logger
 
     async def start(self):
-        self.logger.info("Starting gRPC server for %s...", configs.PROJECT_NAME)
+        self.logger.info("Starting the application...")
         try:
-            await self.grpc_server.serve()
+            await self.grpc_server.start()
         except Exception as e:
-            self.logger.error("Failed to start the gRPC server: %s", str(e))
+            self.logger.error(f"Error during application startup: {str(e)}", exc_info=True)
             raise
         finally:
-            self.logger.info("Shutting down gRPC server for %s...", configs.PROJECT_NAME)
+            self.logger.info("Application shutdown complete.")
+
+
+async def main():
+    app_instance = App()
+    await app_instance.start()
+
 
 if __name__ == "__main__":
-    app_instance = App()
-
     try:
-        asyncio.run(app_instance.start())
+        asyncio.run(main())
     except KeyboardInterrupt:
-        app_instance.logger.info("Server interrupted by user. Exiting gracefully...")
+        logging.info("Application interrupted by user. Exiting gracefully...")
     except Exception as e:
-        app_instance.logger.error("Unhandled exception: %s", str(e))
+        logging.error(f"Unhandled exception: {str(e)}", exc_info=True)
         raise

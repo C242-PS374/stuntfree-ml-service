@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+service MLService {
+    rpc ImageDetection (ImageRequest) returns (ImageResponse);
+    rpc PredictNutrition (NutritionRequest) returns (NutritionResponse);
+    rpc PredictStunting (StuntingRequest) returns (StuntingResponse);
+}
+
+message ImageRequest {
+    bytes image_data = 1; 
+}
+
+message ImageResponse {
+    string result = 1;  
+}
+
+message NutritionRequest {
+    float height = 1;  
+    float weight = 2;  
+    int32 age = 3;     
+}
+
+message NutritionResponse {
+    string nutrition_status = 1;  
+}
+
+message StuntingRequest {
+    int32 age = 1;                
+    float birth_weight = 2;       
+    int32 birth_length = 3;       
+    float body_weight = 4;        
+    float body_length = 5;        
+    int32 is_sanitized_place = 6;  
+    int32 is_healthy_food = 7;     
+}
+
+message StuntingResponse {
+    string stunting_status = 1;  
+}
