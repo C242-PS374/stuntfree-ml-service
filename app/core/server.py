@@ -6,9 +6,9 @@ import signal
 import platform
 from concurrent import futures
 from generated import ml_services_pb2_grpc
-# from app.controller.image_detection import ImageService
-# from app.controller.predict_nutrition import NutritionService
-# from app.controller.predict_stunting import StuntingService
+# from controller.image_detection import ImageService
+from controller.predict_nutrition import NutritionService
+from controller.predict_stunting import StuntingService
 
 class GRPCServer:
     def __init__(self):
@@ -27,8 +27,8 @@ class GRPCServer:
     def _register_services(self):
         try:
             # ml_services_pb2_grpc.add_MLServiceServicer_to_server(ImageService(), self.server)
-            # ml_services_pb2_grpc.add_MLServiceServicer_to_server(NutritionService(), self.server)
-            # ml_services_pb2_grpc.add_MLServiceServicer_to_server(StuntingService(), self.server)
+            ml_services_pb2_grpc.add_MLServiceServicer_to_server(NutritionService(), self.server)
+            ml_services_pb2_grpc.add_MLServiceServicer_to_server(StuntingService(), self.server)
             self.logger.info("All gRPC services registered successfully.")
         except Exception as e:
             self.logger.error(f"Failed to register services: {str(e)}", exc_info=True)
