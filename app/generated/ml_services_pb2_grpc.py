@@ -49,6 +49,11 @@ class MLServiceStub(object):
                 request_serializer=ml__services__pb2.StuntingRequest.SerializeToString,
                 response_deserializer=ml__services__pb2.StuntingResponse.FromString,
                 _registered_method=True)
+        self.HealthCheck = channel.unary_unary(
+                '/MLService/HealthCheck',
+                request_serializer=ml__services__pb2.Empty.SerializeToString,
+                response_deserializer=ml__services__pb2.HealthResponse.FromString,
+                _registered_method=True)
 
 
 class MLServiceServicer(object):
@@ -72,6 +77,12 @@ class MLServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def HealthCheck(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_MLServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -89,6 +100,11 @@ def add_MLServiceServicer_to_server(servicer, server):
                     servicer.PredictStunting,
                     request_deserializer=ml__services__pb2.StuntingRequest.FromString,
                     response_serializer=ml__services__pb2.StuntingResponse.SerializeToString,
+            ),
+            'HealthCheck': grpc.unary_unary_rpc_method_handler(
+                    servicer.HealthCheck,
+                    request_deserializer=ml__services__pb2.Empty.FromString,
+                    response_serializer=ml__services__pb2.HealthResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -172,6 +188,33 @@ class MLService(object):
             '/MLService/PredictStunting',
             ml__services__pb2.StuntingRequest.SerializeToString,
             ml__services__pb2.StuntingResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def HealthCheck(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/MLService/HealthCheck',
+            ml__services__pb2.Empty.SerializeToString,
+            ml__services__pb2.HealthResponse.FromString,
             options,
             channel_credentials,
             insecure,
