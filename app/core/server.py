@@ -7,6 +7,7 @@ import platform
 from concurrent import futures
 from generated import ml_services_pb2_grpc
 # from controller.image_detection import ImageService
+from controller.health_check import HealthCheck
 from controller.predict_nutrition import NutritionService
 from controller.predict_stunting import StuntingService
 
@@ -29,6 +30,7 @@ class GRPCServer:
             # ml_services_pb2_grpc.add_MLServiceServicer_to_server(ImageService(), self.server)
             ml_services_pb2_grpc.add_MLServiceServicer_to_server(NutritionService(), self.server)
             ml_services_pb2_grpc.add_MLServiceServicer_to_server(StuntingService(), self.server)
+            ml_services_pb2_grpc.add_MLServiceServicer_to_server(HealthCheck(), self.server)
             self.logger.info("All gRPC services registered successfully.")
         except Exception as e:
             self.logger.error(f"Failed to register services: {str(e)}", exc_info=True)
@@ -38,7 +40,7 @@ class GRPCServer:
         try:
             self.server.add_insecure_port(f"[::]:{self.port}")
             self.server.start()
-            self.logger.info(f"gRPC Server running on port {self.port}")
+            self.logger.info(f"gRPC Server running on port http://localhost:{self.port}")
             await self._wait_for_termination()
         except Exception as e:
             self.logger.error(f"Error while starting the gRPC server: {str(e)}", exc_info=True)

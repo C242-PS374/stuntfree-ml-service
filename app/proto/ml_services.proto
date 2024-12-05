@@ -4,6 +4,7 @@ service MLService {
     rpc ImageDetection (ImageRequest) returns (ImageResponse);
     rpc PredictNutrition (NutritionRequest) returns (NutritionResponse);
     rpc PredictStunting (StuntingRequest) returns (StuntingResponse);
+    rpc HealthCheck (Empty) returns (HealthResponse);
 }
 
 message ImageRequest {
@@ -36,4 +37,10 @@ message StuntingRequest {
 
 message StuntingResponse {
     string stunting_status = 1;  
+}
+
+message Empty {}
+
+message HealthResponse {
+    string status = 1;
 }
