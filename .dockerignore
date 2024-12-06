@@ -6,3 +6,8 @@ app.egg-info
 .coverage
 htmlcov
 .venv
+*.pyo
+*.pyd
+*.log
+*.sqlite3
+.env

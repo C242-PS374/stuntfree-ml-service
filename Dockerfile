@@ -1,11 +1,20 @@
 FROM python:3.12-slim
 
-WORKDIR /code
+ENV GRPC_SERVER_PORT=50051
 
-COPY ./requirements.txt /code/requirements.txt
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ./app /code/app
+COPY . .
 
-CMD ["fastapi", "run", "--port", "8080"]
+EXPOSE ${GRPC_SERVER_PORT}
+
+CMD ["python", "app/main.py"]
