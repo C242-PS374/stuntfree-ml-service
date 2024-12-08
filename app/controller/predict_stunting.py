@@ -1,7 +1,7 @@
 import joblib
 import io
 import os
-# from google.cloud import storage
+from google.cloud import storage
 from generated import ml_services_pb2
 from generated import ml_services_pb2_grpc
 
@@ -18,21 +18,20 @@ class StuntingService(ml_services_pb2_grpc.MLServiceServicer):
         model = joblib.load(model_file_path)
         return model
 
+    def load_model_bucket(self):
+        client = storage.Client()
+        bucket_name = "model_buckets_ps374"
+        model_file_name = ""
 
-    # def load_model(self):
-    #     client = storage.Client()
-    #     bucket_name = ""
-    #     model_file_name = ""
-
-    #     bucket = client.bucket(bucket_name)
-    #     blob = bucket.blob(model_file_name)
+        bucket = client.bucket(bucket_name)
+        blob = bucket.blob(model_file_name)
         
-    #     model_file = io.BytesIO()
-    #     blob.download_to_file(model_file)
-    #     model_file.seek(0)
+        model_file = io.BytesIO()
+        blob.download_to_file(model_file)
+        model_file.seek(0)
 
-    #     model = joblib.load(model_file)
-    #     return model
+        model = joblib.load(model_file)
+        return model
 
     def PredictStunting(self, request, context):
         age = request.age

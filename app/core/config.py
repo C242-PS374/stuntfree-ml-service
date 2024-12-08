@@ -10,6 +10,10 @@ class Configs(BaseSettings):
     API: str = "/api"
     API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = os.getenv("PROJECT_NAME", "FastAPI")
+
+    MODEL_BUCKET_NAME: str = os.getenv("MODEL_BUCKET_NAME", 'model_buckets_ps374')
+    FOOD_MODEL_FILE: str = os.getenv("FOOD_MODEL_FILE", 'model_buckets_ps374')
+    STUNTING_MODEL_FILE: str = os.getenv("STUNTING_MODEL_FILE", 'model_buckets_ps374')
     
     PROJECT_ROOT: str = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
     DATETIME_FORMAT: str = "%Y-%m-%dT%H:%M:%S"
