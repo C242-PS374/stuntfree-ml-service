@@ -3,9 +3,8 @@ import io
 import os
 # from google.cloud import storage
 from generated import ml_services_pb2
-from generated import ml_services_pb2_grpc
 
-class StuntingService(ml_services_pb2_grpc.MLServiceServicer):
+class StuntingService:
     def __init__(self):
         self.model = self.load_model_local()
 

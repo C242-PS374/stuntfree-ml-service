@@ -10,7 +10,11 @@ class Configs(BaseSettings):
     API: str = "/api"
     API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = os.getenv("PROJECT_NAME", "FastAPI")
-    
+
+    MODEL_BUCKET: str = os.getenv("MODEL_BUCKET", "models")
+
+    IMAGE_MODEL_PATH: str = os.getenv("IMAGE_MODEL_PATH", "image_model")
+
     PROJECT_ROOT: str = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
     DATETIME_FORMAT: str = "%Y-%m-%dT%H:%M:%S"
     DATE_FORMAT: str = "%Y-%m-%d"

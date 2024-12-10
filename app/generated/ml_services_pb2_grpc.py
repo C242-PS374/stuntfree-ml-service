@@ -5,6 +5,11 @@ import warnings
 
 from generated import ml_services_pb2 as ml__services__pb2
 
+from controller.image_detection import ImageService
+from controller.predict_stunting import StuntingService
+from controller.predict_nutrition import NutritionService
+from controller.health_check import HealthCheck
+
 GRPC_GENERATED_VERSION = '1.68.0'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
@@ -60,28 +65,16 @@ class MLServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def ImageDetection(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        return ImageService().ImageDetection(request, context)
 
     def PredictNutrition(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        return NutritionService().PredictNutrition(request, context)
 
     def PredictStunting(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        return StuntingService().PredictStunting(request, context)
 
     def HealthCheck(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        return HealthCheck().HealthCheck(request, context)
 
 
 def add_MLServiceServicer_to_server(servicer, server):
