@@ -10,9 +10,9 @@
 - **Dynamic Model Loading**: Load and infer with models on demand from Cloud Storage.
 - **Dockerized Deployment**: Simplified setup and portability using Docker and deploy on Cloud Run.
 
-## Installation
+### Installation
 
-### Local Setup
+#### Local Setup
 
 1. Clone the repository:
    ```bash
@@ -32,7 +32,7 @@
    python src/server.py
    ```
 
-### Using Docker
+#### Using Docker
 
 1. Build the Docker image:
    ```bash
@@ -44,7 +44,7 @@
    docker run -p 50051:50051 stuntfree-ml-service
    ```
 
-## Usage
+### Usage
 
 1. Start the StuntFree ML Service (gRPC server service) locally or via Docker.
 2. Use a gRPC client to interact and connect as the Main API service. [Main API Service](https://github.com/C242-PS374/stuntfree-api)
