@@ -3,11 +3,12 @@
 import grpc
 import warnings
 
-from generated import ml_services_pb2 as ml__services__pb2
+from generated import ml_services_pb2 as app_dot_proto_dot_ml__services__pb2
 
-from controller.image_detection import ImageService
-from controller.predict_stunting import StuntingService
 from controller.predict_nutrition import NutritionService
+from controller.predict_stunting import StuntingService
+from controller.image_detection import ImageService
+from controller.predict_pregnant_stunting import PregnantStuntingService
 from controller.health_check import HealthCheck
 
 GRPC_GENERATED_VERSION = '1.68.0'
@@ -23,7 +24,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in ml_services_pb2_grpc.py depends on'
+        + f' but the generated code in app/proto/ml_services_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
@@ -41,23 +42,28 @@ class MLServiceStub(object):
         """
         self.ImageDetection = channel.unary_unary(
                 '/MLService/ImageDetection',
-                request_serializer=ml__services__pb2.ImageRequest.SerializeToString,
-                response_deserializer=ml__services__pb2.ImageResponse.FromString,
+                request_serializer=app_dot_proto_dot_ml__services__pb2.ImageRequest.SerializeToString,
+                response_deserializer=app_dot_proto_dot_ml__services__pb2.ImageResponse.FromString,
                 _registered_method=True)
         self.PredictNutrition = channel.unary_unary(
                 '/MLService/PredictNutrition',
-                request_serializer=ml__services__pb2.NutritionRequest.SerializeToString,
-                response_deserializer=ml__services__pb2.NutritionResponse.FromString,
+                request_serializer=app_dot_proto_dot_ml__services__pb2.NutritionRequest.SerializeToString,
+                response_deserializer=app_dot_proto_dot_ml__services__pb2.NutritionResponse.FromString,
                 _registered_method=True)
         self.PredictStunting = channel.unary_unary(
                 '/MLService/PredictStunting',
-                request_serializer=ml__services__pb2.StuntingRequest.SerializeToString,
-                response_deserializer=ml__services__pb2.StuntingResponse.FromString,
+                request_serializer=app_dot_proto_dot_ml__services__pb2.StuntingRequest.SerializeToString,
+                response_deserializer=app_dot_proto_dot_ml__services__pb2.StuntingResponse.FromString,
+                _registered_method=True)
+        self.PredictPregnantStunting = channel.unary_unary(
+                '/MLService/PredictPregnantStunting',
+                request_serializer=app_dot_proto_dot_ml__services__pb2.PregnantStuntingRequest.SerializeToString,
+                response_deserializer=app_dot_proto_dot_ml__services__pb2.PregnantStuntingResponse.FromString,
                 _registered_method=True)
         self.HealthCheck = channel.unary_unary(
                 '/MLService/HealthCheck',
-                request_serializer=ml__services__pb2.Empty.SerializeToString,
-                response_deserializer=ml__services__pb2.HealthResponse.FromString,
+                request_serializer=app_dot_proto_dot_ml__services__pb2.Empty.SerializeToString,
+                response_deserializer=app_dot_proto_dot_ml__services__pb2.HealthResponse.FromString,
                 _registered_method=True)
 
 
@@ -68,10 +74,16 @@ class MLServiceServicer(object):
         return ImageService().ImageDetection(request, context)
 
     def PredictNutrition(self, request, context):
-        return NutritionService().PredictNutrition(request, context)
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def PredictStunting(self, request, context):
         return StuntingService().PredictStunting(request, context)
+
+    def PredictPregnantStunting(self, request, context):
+        return PregnantStuntingService().PredictPregnantStunting(request, context)
 
     def HealthCheck(self, request, context):
         return HealthCheck().HealthCheck(request, context)
@@ -81,23 +93,28 @@ def add_MLServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'ImageDetection': grpc.unary_unary_rpc_method_handler(
                     servicer.ImageDetection,
-                    request_deserializer=ml__services__pb2.ImageRequest.FromString,
-                    response_serializer=ml__services__pb2.ImageResponse.SerializeToString,
+                    request_deserializer=app_dot_proto_dot_ml__services__pb2.ImageRequest.FromString,
+                    response_serializer=app_dot_proto_dot_ml__services__pb2.ImageResponse.SerializeToString,
             ),
             'PredictNutrition': grpc.unary_unary_rpc_method_handler(
                     servicer.PredictNutrition,
-                    request_deserializer=ml__services__pb2.NutritionRequest.FromString,
-                    response_serializer=ml__services__pb2.NutritionResponse.SerializeToString,
+                    request_deserializer=app_dot_proto_dot_ml__services__pb2.NutritionRequest.FromString,
+                    response_serializer=app_dot_proto_dot_ml__services__pb2.NutritionResponse.SerializeToString,
             ),
             'PredictStunting': grpc.unary_unary_rpc_method_handler(
                     servicer.PredictStunting,
-                    request_deserializer=ml__services__pb2.StuntingRequest.FromString,
-                    response_serializer=ml__services__pb2.StuntingResponse.SerializeToString,
+                    request_deserializer=app_dot_proto_dot_ml__services__pb2.StuntingRequest.FromString,
+                    response_serializer=app_dot_proto_dot_ml__services__pb2.StuntingResponse.SerializeToString,
+            ),
+            'PredictPregnantStunting': grpc.unary_unary_rpc_method_handler(
+                    servicer.PredictPregnantStunting,
+                    request_deserializer=app_dot_proto_dot_ml__services__pb2.PregnantStuntingRequest.FromString,
+                    response_serializer=app_dot_proto_dot_ml__services__pb2.PregnantStuntingResponse.SerializeToString,
             ),
             'HealthCheck': grpc.unary_unary_rpc_method_handler(
                     servicer.HealthCheck,
-                    request_deserializer=ml__services__pb2.Empty.FromString,
-                    response_serializer=ml__services__pb2.HealthResponse.SerializeToString,
+                    request_deserializer=app_dot_proto_dot_ml__services__pb2.Empty.FromString,
+                    response_serializer=app_dot_proto_dot_ml__services__pb2.HealthResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -125,8 +142,8 @@ class MLService(object):
             request,
             target,
             '/MLService/ImageDetection',
-            ml__services__pb2.ImageRequest.SerializeToString,
-            ml__services__pb2.ImageResponse.FromString,
+            app_dot_proto_dot_ml__services__pb2.ImageRequest.SerializeToString,
+            app_dot_proto_dot_ml__services__pb2.ImageResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -152,8 +169,8 @@ class MLService(object):
             request,
             target,
             '/MLService/PredictNutrition',
-            ml__services__pb2.NutritionRequest.SerializeToString,
-            ml__services__pb2.NutritionResponse.FromString,
+            app_dot_proto_dot_ml__services__pb2.NutritionRequest.SerializeToString,
+            app_dot_proto_dot_ml__services__pb2.NutritionResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -179,8 +196,35 @@ class MLService(object):
             request,
             target,
             '/MLService/PredictStunting',
-            ml__services__pb2.StuntingRequest.SerializeToString,
-            ml__services__pb2.StuntingResponse.FromString,
+            app_dot_proto_dot_ml__services__pb2.StuntingRequest.SerializeToString,
+            app_dot_proto_dot_ml__services__pb2.StuntingResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def PredictPregnantStunting(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/MLService/PredictPregnantStunting',
+            app_dot_proto_dot_ml__services__pb2.PregnantStuntingRequest.SerializeToString,
+            app_dot_proto_dot_ml__services__pb2.PregnantStuntingResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -206,8 +250,8 @@ class MLService(object):
             request,
             target,
             '/MLService/HealthCheck',
-            ml__services__pb2.Empty.SerializeToString,
-            ml__services__pb2.HealthResponse.FromString,
+            app_dot_proto_dot_ml__services__pb2.Empty.SerializeToString,
+            app_dot_proto_dot_ml__services__pb2.HealthResponse.FromString,
             options,
             channel_credentials,
             insecure,

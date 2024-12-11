@@ -4,6 +4,7 @@ service MLService {
     rpc ImageDetection (ImageRequest) returns (ImageResponse);
     rpc PredictNutrition (NutritionRequest) returns (NutritionResponse);
     rpc PredictStunting (StuntingRequest) returns (StuntingResponse);
+    rpc PredictPregnantStunting (PregnantStuntingRequest) returns (PregnantStuntingResponse);
     rpc HealthCheck (Empty) returns (HealthResponse);
 }
 
@@ -37,6 +38,16 @@ message StuntingRequest {
 
 message StuntingResponse {
     string stunting_status = 1;  
+}
+
+message PregnantStuntingRequest {
+    int32 gestasional_age = 1;
+    int32 is_sanitized_place = 2;
+    int32 is_healthy_food = 3;
+}
+
+message PregnantStuntingResponse {
+    string stunting_status = 1;
 }
 
 message Empty {}

@@ -14,6 +14,8 @@ class Configs(BaseSettings):
     MODEL_BUCKET: str = os.getenv("MODEL_BUCKET", "models")
 
     IMAGE_MODEL_PATH: str = os.getenv("IMAGE_MODEL_PATH", "image_model")
+    STUNTING_MODEL_PATH: str = os.getenv("STUNTING_MODEL_PATH", "stunting_model.joblib")
+    PREGNANT_STUNTING_MODEL: str = os.getenv("PREGNANT_STUNTING_MODEL", "pregnant_stunting_model.joblib")
 
     PROJECT_ROOT: str = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
     DATETIME_FORMAT: str = "%Y-%m-%dT%H:%M:%S"

@@ -56,6 +56,22 @@ class StuntingResponse(_message.Message):
     stunting_status: str
     def __init__(self, stunting_status: _Optional[str] = ...) -> None: ...
 
+class PregnantStuntingRequest(_message.Message):
+    __slots__ = ("gestasional_age", "is_sanitized_place", "is_healthy_food")
+    GESTASIONAL_AGE_FIELD_NUMBER: _ClassVar[int]
+    IS_SANITIZED_PLACE_FIELD_NUMBER: _ClassVar[int]
+    IS_HEALTHY_FOOD_FIELD_NUMBER: _ClassVar[int]
+    gestasional_age: int
+    is_sanitized_place: int
+    is_healthy_food: int
+    def __init__(self, gestasional_age: _Optional[int] = ..., is_sanitized_place: _Optional[int] = ..., is_healthy_food: _Optional[int] = ...) -> None: ...
+
+class PregnantStuntingResponse(_message.Message):
+    __slots__ = ("stunting_status",)
+    STUNTING_STATUS_FIELD_NUMBER: _ClassVar[int]
+    stunting_status: str
+    def __init__(self, stunting_status: _Optional[str] = ...) -> None: ...
+
 class Empty(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
