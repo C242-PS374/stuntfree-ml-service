@@ -43,6 +43,6 @@ class PregnantStuntingService:
         
         input_data = [[age, is_sanitized_place, is_healthy_food]] 
         
-        prediction = self.model.predict_proba(input_data)
+        prediction = self.model.predict(input_data)
         
-        return ml_services_pb2.StuntingResponse(stunting_status=str(prediction[0][0]))
+        return ml_services_pb2.StuntingResponse(stunting_status=str(prediction[0]))

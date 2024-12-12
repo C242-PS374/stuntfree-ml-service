@@ -22,7 +22,7 @@ class ImageService:
 
         local_model_path = os.path.join(os.path.dirname(__file__), 'model/image_model.keras')
 
-        if not os.path.exists(os.path.dirname(local_model_path)):
+        if not os.path.exists(local_model_path):
             os.makedirs(os.path.dirname(local_model_path), exist_ok=True)
 
             print("Downloading image scan model from GCS...")
@@ -38,11 +38,7 @@ class ImageService:
             print("Image scan model loaded successfully.")
             return model
         except Exception as e:
-            with open(self.model_path, 'rb') as f:
-                    print("File contents (first 100 bytes):")
-                    print(f.read(100))
-
-            print(f"Error loading model: {e}")
+            print(f"Error loading model")
             raise
 
     def ImageDetection(self, request, context):
